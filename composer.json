@@ -1,0 +1,48 @@
+{
+  "name": "woda/react-mui-example-server",
+  "type": "project",
+  "license": "MIT",
+  "description": "Server for React Material Design backend example",
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://wpackagist.org",
+      "only": ["wpackagist-plugin/*", "wpackagist-theme/*"]
+    }
+  ],
+  "require": {
+    "php": ">=7.1",
+    "composer/installers": "^1.8",
+    "vlucas/phpdotenv": "^4.1.8",
+    "oscarotero/env": "^2.1",
+    "roots/bedrock-autoloader": "^1.0",
+    "roots/wordpress": "5.5",
+    "roots/wp-config": "1.0.0",
+    "roots/wp-password-bcrypt": "1.0.0",
+    "wp-graphql/wp-graphql": "^0.12.1",
+    "wp-graphql/wp-graphql-jwt-authentication": "^0.4.1"
+  },
+  "require-dev": {
+    "squizlabs/php_codesniffer": "^3.5.6",
+    "roave/security-advisories": "dev-master"
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "preferred-install": "dist",
+    "vendor-dir": "server/vendor"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "extra": {
+    "installer-paths": {
+      "server/web/app/mu-plugins/{$name}/": [
+        "type:wordpress-muplugin",
+        "wp-graphql/wp-graphql",
+        "wp-graphql/wp-graphql-jwt-authentication"
+      ],
+      "server/web/app/plugins/{$name}/": ["type:wordpress-plugin"],
+      "server/web/app/themes/{$name}/": ["type:wordpress-theme"]
+    },
+    "wordpress-install-dir": "server/web/wp"
+  }
+}

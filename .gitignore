@@ -1,0 +1,24 @@
+# Server
+server/web/app/plugins/*
+!server/web/app/plugins/.gitkeep
+server/web/app/mu-plugins/*/
+server/web/app/upgrade
+server/web/app/uploads/*
+!server/web/app/uploads/.gitkeep
+server/web/wp
+server/web/.htaccess
+server/vendor
+
+# Dotenv
+.env
+.env.*
+!.env.example
+wp-cli.local.yml
+
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# Logs
+*.log

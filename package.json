@@ -1,0 +1,56 @@
+{
+  "name": "woda-react-mui-example",
+  "version": "4.0.0",
+  "private": true,
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "graphql-types": "apollo codegen:generate --localSchemaFile=schema.graphql --target=typescript --addTypename --includes=src/**/*.ts* --globalTypesFile=src/graphql/globalTypes.ts --passthroughCustomScalars --customScalarsPrefix=GqlScalar",
+    "graphql-codegen": "graphql-codegen --config codegen.yml"
+  },
+  "dependencies": {
+    "@apollo/client": "^3.1.3",
+    "@apollo/react-hooks": "^4.0.0",
+    "@material-ui/core": "latest",
+    "@material-ui/icons": "^4.9.1",
+    "clsx": "latest",
+    "graphql": "^15.3.0",
+    "mui-datatables": "^3.4.0",
+    "react": "latest",
+    "react-dom": "^16.13.1",
+    "react-helmet": "^6.1.0",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "latest",
+    "recharts": "^1.8.5",
+    "typescript": "^3.9.7"
+  },
+  "devDependencies": {
+    "@apollo/react-testing": "^4.0.0",
+    "@graphql-codegen/cli": "^1.17.8",
+    "@graphql-codegen/fragment-matcher": "^1.17.8",
+    "@testing-library/dom": "^7.20.0",
+    "@testing-library/react": "^9.3.0",
+    "@types/jest": "^25.1.2",
+    "@types/mui-datatables": "^3.2.0",
+    "@types/node": "^13.7.1",
+    "@types/react": "^16.8.4",
+    "@types/react-dom": "^16.8.2",
+    "@types/react-helmet": "^6.1.0",
+    "@types/react-router-dom": "^5.1.0",
+    "@types/recharts": "^1.8.14"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
