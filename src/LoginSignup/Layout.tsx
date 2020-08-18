@@ -1,4 +1,4 @@
-import React, {ReactNode} from 'react';
+import React, {ReactNode, useContext} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Paper from '@material-ui/core/Paper';
@@ -7,6 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import {makeStyles, Theme} from '@material-ui/core/styles';
 import {Redirect} from "react-router-dom";
 import Copyright from "../Component/Global/Copyright";
+import {tokenContext} from "./TokenProvider";
 
 interface LayoutProps {
     children?: ReactNode;
@@ -45,8 +46,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export const Layout = ({children}: LayoutProps) => {
     const classes = useStyles();
-    const authToken = localStorage.getItem('token');
-    if (authToken !== null) {
+    const {token} = useContext(tokenContext);
+    if (token !== undefined) {
         return (
             <Redirect to={'/'}/>
         );

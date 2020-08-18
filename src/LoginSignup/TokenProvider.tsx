@@ -19,8 +19,12 @@ export default function TokenProvider({children}: TokenProviderProps) {
         localStorage.setItem('token', token ?? '');
         setState({...state, token: token})
     }
+    let token: string|null|undefined = localStorage.getItem('token');
+    if (token === null || token.length === 0) {
+        token = undefined;
+    }
     const initState: TokenContext = {
-        token: localStorage.getItem('token') ?? undefined,
+        token: token,
         setToken: setToken
     }
     const [state, setState] = React.useState(initState)

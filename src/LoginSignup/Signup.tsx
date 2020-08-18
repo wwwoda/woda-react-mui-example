@@ -8,6 +8,8 @@ import {makeStyles, Theme} from '@material-ui/core/styles';
 import Typography from "@material-ui/core/Typography";
 import {Link} from "react-router-dom";
 import {Layout} from "./Layout";
+import {useRegisterUser} from "../GraphQl/Mutation/RegisterUser";
+import {tokenContext} from "./TokenProvider";
 
 const useStyles = makeStyles((theme: Theme) => ({
     form: {
@@ -21,7 +23,12 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export default function Signup() {
     const classes = useStyles();
-    //const [registerUser, { loading: mutationLoading, error: mutationError }] = useRegisterUser();
+    const [email, setEmail] = React.useState('');
+    const [password, setPassword] = React.useState('');
+    const [firstName, setFirstName] = React.useState('');
+    const [lastName, setLastName] = React.useState('');
+    const [registerUser, { loading: mutationLoading, error: mutationError }] = useRegisterUser();
+    const {setToken} = React.useContext(tokenContext);
     return (
         <Layout>
             <Typography component="h1" variant="h5">
@@ -29,19 +36,22 @@ export default function Signup() {
             </Typography>
             <form
                 className={classes.form}
-                onSubmit={async function (e) {
-                    e.preventDefault();
-                    const form = e.target;
-                    console.log(form)
-                    /*const response = await registerUser({
+                onSubmit={event => {
+                    event.preventDefault();
+                    registerUser({
                         variables: {
                             clientMutationId: "uniqueId",
-                            username: "test",
-                            password: "test",
-                            email: "test@test.com",
+                            username: email,
+                            password: password,
+                            email: email,
+                            firstName: firstName,
+                            lastName: lastName,
                         }
+                    }).then(response => {
+                        setToken(response?.data?.registerUser?.user?.jwtAuthToken ?? undefined);
+                    }).catch(error => {
+                        console.log(error);
                     });
-                    localStorage.setItem('token', response!.data!.registerUser!.user!.jwtAuthToken!)*/
                 }}>
                 <Grid container spacing={2}>
                     <Grid item xs={12} sm={6}>
@@ -54,6 +64,8 @@ export default function Signup() {
                             id="firstName"
                             label="First Name"
                             autoFocus
+                            value={firstName}
+                            onChange={event => setFirstName(event.target.value ?? '')}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -65,6 +77,8 @@ export default function Signup() {
                             label="Last Name"
                             name="lastName"
                             autoComplete="lname"
+                            value={lastName}
+                            onChange={event => setLastName(event.target.value ?? '')}
                         />
                     </Grid>
                     <Grid item xs={12}>
@@ -75,7 +89,10 @@ export default function Signup() {
                             id="email"
                             label="Email Address"
                             name="email"
+                            type="email"
                             autoComplete="email"
+                            value={email}
+                            onChange={event => setEmail(event.target.value ?? '')}
                         />
                     </Grid>
                     <Grid item xs={12}>
@@ -88,6 +105,8 @@ export default function Signup() {
                             type="password"
                             id="password"
                             autoComplete="current-password"
+                            value={password}
+                            onChange={event => setPassword(event.target.value ?? '')}
                         />
                     </Grid>
                     <Grid item xs={12}>
@@ -106,6 +125,8 @@ export default function Signup() {
                 >
                     Sign Up
                 </Button>
+                {mutationLoading && <p>Loading...</p>}
+                {mutationError && <p>Error :( Please try again</p>}
                 <Grid container justify="flex-end">
                     <Grid item>
                         <Link to={'/login'}>

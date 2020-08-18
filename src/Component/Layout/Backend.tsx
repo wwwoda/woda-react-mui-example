@@ -1,8 +1,9 @@
-import React, {ReactNode} from 'react';
+import React, {ReactNode, useContext} from 'react';
 import AppBar from "./../Global/AppBar";
 import Drawer from "./../Global/Drawer";
 import {Box, Container, Grid, Link, makeStyles, Theme, Typography} from "@material-ui/core";
 import {Redirect} from "react-router-dom";
+import {tokenContext} from "../../LoginSignup/TokenProvider";
 
 interface LayoutProps {
     children?: ReactNode;
@@ -40,14 +41,16 @@ function Copyright() {
 export const Backend = ({children}: LayoutProps) => {
     const classes = useStyles();
     const [drawerOpen, setDrawerOpen] = React.useState(true);
+    const {token} = useContext(tokenContext);
     const drawerOpenedCb = () => {
         setDrawerOpen(true);
     };
     const drawerClosedCb = () => {
         setDrawerOpen(false);
     };
-    const authToken = localStorage.getItem('token');
-    if (authToken === null) {
+    console.log(token?.length)
+    console.log('token: ', token)
+    if (token === undefined) {
         return (
             <Redirect to={'/login'}/>
         );

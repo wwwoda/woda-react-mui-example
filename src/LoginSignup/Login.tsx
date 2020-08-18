@@ -22,11 +22,11 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 export default function Login() {
+    const classes = useStyles();
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
-    const classes = useStyles();
-    const {setToken} = React.useContext(tokenContext);
     const [loginUser, { loading: mutationLoading, error: mutationError }] = useLoginUser();
+    const {setToken} = React.useContext(tokenContext);
     return (
         <Layout>
             <Typography component="h1" variant="h5">
@@ -59,7 +59,7 @@ export default function Login() {
                     autoComplete="email"
                     autoFocus
                     value={username}
-                    onChange={(e) => setUsername(e.target.value ?? '')}
+                    onChange={event => setUsername(event.target.value ?? '')}
                 />
                 <TextField
                     variant="outlined"
@@ -72,7 +72,7 @@ export default function Login() {
                     id="password"
                     autoComplete="current-password"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value ?? '')}
+                    onChange={event => setPassword(event.target.value ?? '')}
                 />
                 <FormControlLabel
                     control={<Checkbox value="remember" color="primary" />}

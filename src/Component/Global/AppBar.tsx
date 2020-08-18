@@ -1,9 +1,11 @@
 import {default as MuiAppBar} from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import React from "react";
+import React, {useContext} from "react";
 import {IconButton, makeStyles, Menu, MenuItem, Theme} from "@material-ui/core";
 import {AccountCircle} from "@material-ui/icons";
+import {useApolloClient} from "@apollo/client";
+import {tokenContext} from "../../LoginSignup/TokenProvider";
 
 const useStyles = makeStyles((theme: Theme) => ({
     appBar: {
@@ -24,6 +26,8 @@ interface AppBarProps {
 
 export default function AppBar({drawerOpenedCb, drawerOpened}: AppBarProps) {
     const classes = useStyles();
+    const client = useApolloClient();
+    const {setToken} = useContext(tokenContext);
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
     const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -33,9 +37,9 @@ export default function AppBar({drawerOpenedCb, drawerOpened}: AppBarProps) {
         setAnchorEl(null);
     };
     const handleLogout = (event: React.MouseEvent<HTMLElement>) => {
-        //client.resetStore();
-        localStorage.clear();
-        console.log('cleared')
+        client.resetStore();
+        setToken(undefined);
+        console.log('')
     };
     return (
         <MuiAppBar position="fixed" className={classes.appBar}>
