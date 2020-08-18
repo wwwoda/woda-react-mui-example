@@ -5,8 +5,8 @@ import Paper from '@material-ui/core/Paper';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import {makeStyles, Theme} from '@material-ui/core/styles';
-import Copyright from "../Global/Copyright";
 import {Redirect} from "react-router-dom";
+import Copyright from "../Component/Global/Copyright";
 
 interface LayoutProps {
     children?: ReactNode;
@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 }));
 
-export const LoginSignup = ({children}: LayoutProps) => {
+export const Layout = ({children}: LayoutProps) => {
     const classes = useStyles();
     const authToken = localStorage.getItem('token');
     if (authToken !== null) {

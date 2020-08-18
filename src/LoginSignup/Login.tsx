@@ -6,9 +6,10 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
 import {makeStyles, Theme} from '@material-ui/core/styles';
 import Typography from "@material-ui/core/Typography";
-import {Link, Redirect} from "react-router-dom";
-import {useLoginUser} from "../../GraphQl/Mutation/LoginUser";
-import {LoginSignup} from "../Layout/LoginSignup";
+import {Layout} from "./Layout";
+import {useLoginUser} from "../GraphQl/Mutation/LoginUser";
+import {Link} from "react-router-dom";
+import {tokenContext} from "./TokenProvider";
 
 const useStyles = makeStyles((theme: Theme) => ({
     form: {
@@ -20,36 +21,32 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 }));
 
-
 export default function Login() {
+    const [username, setUsername] = React.useState('');
+    const [password, setPassword] = React.useState('');
     const classes = useStyles();
+    const {setToken} = React.useContext(tokenContext);
     const [loginUser, { loading: mutationLoading, error: mutationError }] = useLoginUser();
-    const authToken = localStorage.getItem('token');
-    if (authToken !== null) {
-        return (
-            <Redirect to={'/'}/>
-        );
-    }
     return (
-        <LoginSignup>
+        <Layout>
             <Typography component="h1" variant="h5">
                 Login
             </Typography>
             <form
                 className={classes.form}
-                onSubmit={async function (e) {
-                    e.preventDefault();
-                    const form = e.target;
-                    console.log(form)
-                    const response = await loginUser({
+                onSubmit={event => {
+                    event.preventDefault();
+                    loginUser({
                         variables: {
                             clientMutationId: "uniqueId",
-                            username: "test",
-                            password: "test"
-                        }
+                            username: username,
+                            password: password
+                        },
+                    }).then(response => {
+                        setToken(response?.data?.login?.authToken ?? undefined);
+                    }).catch(error => {
+                        console.log(error);
                     });
-                    console.log(response);
-                    localStorage.setItem('token', response!.data!.login!.authToken!);
                 }}>
                 <TextField
                     variant="outlined"
@@ -61,6 +58,8 @@ export default function Login() {
                     name="email"
                     autoComplete="email"
                     autoFocus
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value ?? '')}
                 />
                 <TextField
                     variant="outlined"
@@ -72,6 +71,8 @@ export default function Login() {
                     type="password"
                     id="password"
                     autoComplete="current-password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value ?? '')}
                 />
                 <FormControlLabel
                     control={<Checkbox value="remember" color="primary" />}
@@ -101,6 +102,6 @@ export default function Login() {
                     </Grid>
                 </Grid>
             </form>
-        </LoginSignup>
+        </Layout>
     )
 };

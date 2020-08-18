@@ -6,7 +6,7 @@ import {Button} from "@material-ui/core";
 import {Add} from "@material-ui/icons";
 import {Backend} from "../Layout/Backend";
 import {useGetPosts} from "../../GraphQl/Query/GetPosts";
-import PostsTable from "../Post/PostsTable";
+import PostsTable from "../../Posts/PostsTable";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -22,7 +22,7 @@ export default function Posts() {
     if (loading) return <Backend>Loading...</Backend>;
     if (error) return <Backend>Error! {error.message}</Backend>;
     if (data === null) return <Backend>No results</Backend>;
-    const tableData = data!.posts!.nodes!.map((post) => post === null ? [null, null, null] : [post.id, post.title, post.date]);
+    const tableData = data?.posts?.nodes?.map((post) => post === null ? [null, null, null] : [post.id, post.title, post.date]);
     const headerProps: HeaderProps = {
         actions: [
             <Button variant="contained"
@@ -36,7 +36,7 @@ export default function Posts() {
         tabs: [
             {
                 label: 'Active',
-                content: <PostsTable data={tableData} columns={['id', 'name', 'date']}/>,
+                content: <PostsTable data={tableData ?? []} columns={['id', 'name', 'date']}/>,
             },
         ]
     };

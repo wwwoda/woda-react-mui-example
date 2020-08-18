@@ -7,7 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import {makeStyles, Theme} from '@material-ui/core/styles';
 import Typography from "@material-ui/core/Typography";
 import {Link} from "react-router-dom";
-import {LoginSignup} from "../Layout/LoginSignup";
+import {Layout} from "./Layout";
 
 const useStyles = makeStyles((theme: Theme) => ({
     form: {
@@ -23,7 +23,7 @@ export default function Signup() {
     const classes = useStyles();
     //const [registerUser, { loading: mutationLoading, error: mutationError }] = useRegisterUser();
     return (
-        <LoginSignup>
+        <Layout>
             <Typography component="h1" variant="h5">
                 Signup
             </Typography>
@@ -114,6 +114,6 @@ export default function Signup() {
                     </Grid>
                 </Grid>
             </form>
-        </LoginSignup>
+        </Layout>
     )
 };
