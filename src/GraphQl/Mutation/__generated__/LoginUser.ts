@@ -26,6 +26,10 @@ export interface LoginUser_login {
    */
   authToken: string | null;
   /**
+   * A JWT token that can be used in future requests to get a refreshed jwtAuthToken. If the refresh token used in a request is revoked or otherwise invalid, a valid Auth token will NOT be issued in the response headers.
+   */
+  refreshToken: string | null;
+  /**
    * The user that was logged in
    */
   user: LoginUser_login_user | null;

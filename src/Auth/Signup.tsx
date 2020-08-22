@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {FormEvent} from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -9,7 +9,8 @@ import Typography from "@material-ui/core/Typography";
 import {Link} from "react-router-dom";
 import {Layout} from "./Layout";
 import {useRegisterUser} from "../GraphQl/Mutation/RegisterUser";
-import {tokenContext} from "./TokenProvider";
+import {userContext} from "./UserProvider";
+import {saveAuthToken} from "./AuthToken";
 
 const useStyles = makeStyles((theme: Theme) => ({
     form: {
@@ -23,12 +24,37 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export default function Signup() {
     const classes = useStyles();
+    const [errorMessage, setErrorMessage] = React.useState('');
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [firstName, setFirstName] = React.useState('');
     const [lastName, setLastName] = React.useState('');
     const [registerUser, { loading: mutationLoading, error: mutationError }] = useRegisterUser();
-    const {setToken} = React.useContext(tokenContext);
+    const {setAuthToken} = React.useContext(userContext);
+    const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        try {
+            const response = await registerUser({
+                variables: {
+                    clientMutationId: "uniqueId",
+                    username: email,
+                    password: password,
+                    email: email,
+                    firstName: firstName,
+                    lastName: lastName,
+                }
+            });
+            const authTokenString = response?.data?.registerUser?.user?.jwtAuthToken ?? undefined;
+            const refreshTokenString = response?.data?.registerUser?.user?.jwtRefreshToken ?? undefined;
+            if (authTokenString === undefined || refreshTokenString === undefined) {
+                return;
+            }
+            const authToken = saveAuthToken(authTokenString, refreshTokenString);
+            setAuthToken(authToken);
+        } catch(error) {
+            setErrorMessage(error.message);
+        }
+    };
     return (
         <Layout>
             <Typography component="h1" variant="h5">
@@ -36,23 +62,7 @@ export default function Signup() {
             </Typography>
             <form
                 className={classes.form}
-                onSubmit={event => {
-                    event.preventDefault();
-                    registerUser({
-                        variables: {
-                            clientMutationId: "uniqueId",
-                            username: email,
-                            password: password,
-                            email: email,
-                            firstName: firstName,
-                            lastName: lastName,
-                        }
-                    }).then(response => {
-                        setToken(response?.data?.registerUser?.user?.jwtAuthToken ?? undefined);
-                    }).catch(error => {
-                        console.log(error);
-                    });
-                }}>
+                onSubmit={onSubmit}>
                 <Grid container spacing={2}>
                     <Grid item xs={12} sm={6}>
                         <TextField
@@ -127,6 +137,7 @@ export default function Signup() {
                 </Button>
                 {mutationLoading && <p>Loading...</p>}
                 {mutationError && <p>Error :( Please try again</p>}
+                {errorMessage !== '' && <p>Error :( {errorMessage}</p>}
                 <Grid container justify="flex-end">
                     <Grid item>
                         <Link to={'/login'}>

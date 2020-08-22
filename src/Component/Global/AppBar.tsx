@@ -5,7 +5,7 @@ import React, {useContext} from "react";
 import {IconButton, makeStyles, Menu, MenuItem, Theme} from "@material-ui/core";
 import {AccountCircle} from "@material-ui/icons";
 import {useApolloClient} from "@apollo/client";
-import {tokenContext} from "../../LoginSignup/TokenProvider";
+import {userContext} from "../../Auth/UserProvider";
 
 const useStyles = makeStyles((theme: Theme) => ({
     appBar: {
@@ -27,7 +27,7 @@ interface AppBarProps {
 export default function AppBar({drawerOpenedCb, drawerOpened}: AppBarProps) {
     const classes = useStyles();
     const client = useApolloClient();
-    const {setToken} = useContext(tokenContext);
+    const {setAuthToken} = useContext(userContext);
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
     const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -37,9 +37,9 @@ export default function AppBar({drawerOpenedCb, drawerOpened}: AppBarProps) {
         setAnchorEl(null);
     };
     const handleLogout = (event: React.MouseEvent<HTMLElement>) => {
+        console.log('logout')
         client.resetStore();
-        setToken(undefined);
-        console.log('')
+        setAuthToken(undefined);
     };
     return (
         <MuiAppBar position="fixed" className={classes.appBar}>
@@ -72,8 +72,6 @@ export default function AppBar({drawerOpenedCb, drawerOpened}: AppBarProps) {
                         open={open}
                         onClose={handleClose}
                     >
-                        <MenuItem onClick={handleClose}>Profile</MenuItem>
-                        <MenuItem onClick={handleClose}>My account</MenuItem>
                         <MenuItem onClick={handleLogout}>Logout</MenuItem>
                     </Menu>
                 </div>

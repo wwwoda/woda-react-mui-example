@@ -1,12 +1,11 @@
 import React from 'react';
-import Header, {HeaderProps} from "../Header/Header";
+import Header, {HeaderProps} from "../Component/Header/Header";
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import {Link as RouterLink} from 'react-router-dom';
 import {Button} from "@material-ui/core";
 import {Add} from "@material-ui/icons";
-import {Backend} from "../Layout/Backend";
-import {useGetPosts} from "../../GraphQl/Query/GetPosts";
-import PostsTable from "../../Posts/PostsTable";
+import {Backend} from "../Component/Layout/Backend";
+import PostsTable from "./UsersTable";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -18,11 +17,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function Posts() {
     const classes = useStyles();
-    const {loading, error, data} = useGetPosts();
-    if (loading) return <Backend>Loading...</Backend>;
-    if (error) return <Backend>Error! {error.message}</Backend>;
-    if (data === null) return <Backend>No results</Backend>;
-    const tableData = data?.posts?.nodes?.map((post) => post === null ? [null, null, null] : [post.id, post.title, post.date]);
     const headerProps: HeaderProps = {
         actions: [
             <Button variant="contained"
@@ -30,13 +24,13 @@ export default function Posts() {
                     className={classes.button}
                     startIcon={<Add />}
                     component={RouterLink}
-                    to="/create-post">Add new</Button>,
+                    to="/posts/create">Add new</Button>,
         ],
-        title: 'Projects',
+        title: 'Users',
         tabs: [
             {
                 label: 'Active',
-                content: <PostsTable data={tableData ?? []} columns={['id', 'name', 'date']}/>,
+                content: <PostsTable/>,
             },
         ]
     };

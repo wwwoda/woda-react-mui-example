@@ -7,7 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import {makeStyles, Theme} from '@material-ui/core/styles';
 import {Redirect} from "react-router-dom";
 import Copyright from "../Component/Global/Copyright";
-import {tokenContext} from "./TokenProvider";
+import {userContext} from "./UserProvider";
 
 interface LayoutProps {
     children?: ReactNode;
@@ -46,11 +46,9 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export const Layout = ({children}: LayoutProps) => {
     const classes = useStyles();
-    const {token} = useContext(tokenContext);
-    if (token !== undefined) {
-        return (
-            <Redirect to={'/'}/>
-        );
+    const {authToken} = useContext(userContext);
+    if (authToken !== undefined) {
+        return <Redirect to={'/'}/>;
     }
     return (
         <Grid container component="main" className={classes.root}>

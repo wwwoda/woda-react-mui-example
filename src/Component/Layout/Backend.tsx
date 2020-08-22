@@ -2,8 +2,8 @@ import React, {ReactNode, useContext} from 'react';
 import AppBar from "./../Global/AppBar";
 import Drawer from "./../Global/Drawer";
 import {Box, Container, Grid, Link, makeStyles, Theme, Typography} from "@material-ui/core";
+import {userContext} from "../../Auth/UserProvider";
 import {Redirect} from "react-router-dom";
-import {tokenContext} from "../../LoginSignup/TokenProvider";
 
 interface LayoutProps {
     children?: ReactNode;
@@ -41,20 +41,16 @@ function Copyright() {
 export const Backend = ({children}: LayoutProps) => {
     const classes = useStyles();
     const [drawerOpen, setDrawerOpen] = React.useState(true);
-    const {token} = useContext(tokenContext);
+    const {authToken} = useContext(userContext);
+    if (authToken === undefined) {
+        return <Redirect to={'/login'}/>;
+    }
     const drawerOpenedCb = () => {
         setDrawerOpen(true);
     };
     const drawerClosedCb = () => {
         setDrawerOpen(false);
     };
-    console.log(token?.length)
-    console.log('token: ', token)
-    if (token === undefined) {
-        return (
-            <Redirect to={'/login'}/>
-        );
-    }
     return (
         <div className={classes.root}>
             <AppBar drawerOpened={drawerOpen} drawerOpenedCb={drawerOpenedCb}/>

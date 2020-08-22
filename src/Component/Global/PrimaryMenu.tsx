@@ -4,7 +4,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import List from "@material-ui/core/List";
 import {Link} from "react-router-dom";
-import {BusinessCenter, Dashboard} from "@material-ui/icons";
+import {BusinessCenter, Dashboard, Group} from "@material-ui/icons";
 
 export default function PrimaryMenu() {
     return (
@@ -23,6 +23,14 @@ export default function PrimaryMenu() {
                         <BusinessCenter/>
                     </ListItemIcon>
                     <ListItemText primary="Posts"/>
+                </ListItem>
+            </Link>
+            <Link to={'/users'}>
+                <ListItem button>
+                    <ListItemIcon>
+                        <Group/>
+                    </ListItemIcon>
+                    <ListItemText primary="Users"/>
                 </ListItem>
             </Link>
         </List>

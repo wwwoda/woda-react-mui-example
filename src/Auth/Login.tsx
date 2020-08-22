@@ -1,6 +1,8 @@
-import React from 'react';
+import React, {FormEvent} from 'react';
+import Alert from '@material-ui/lab/Alert';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
@@ -9,7 +11,8 @@ import Typography from "@material-ui/core/Typography";
 import {Layout} from "./Layout";
 import {useLoginUser} from "../GraphQl/Mutation/LoginUser";
 import {Link} from "react-router-dom";
-import {tokenContext} from "./TokenProvider";
+import {userContext} from "./UserProvider";
+import {saveAuthToken} from "./AuthToken";
 
 const useStyles = makeStyles((theme: Theme) => ({
     form: {
@@ -23,10 +26,31 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export default function Login() {
     const classes = useStyles();
+    const [errorMessage, setErrorMessage] = React.useState('');
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
-    const [loginUser, { loading: mutationLoading, error: mutationError }] = useLoginUser();
-    const {setToken} = React.useContext(tokenContext);
+    const [loginUser, { loading }] = useLoginUser();
+    const {setAuthToken} = React.useContext(userContext);
+    const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        try {
+            const response = await loginUser({
+                variables: {
+                    clientMutationId: "uniqueId",
+                    username: username,
+                    password: password
+                },
+            });
+            const authTokenString = response?.data?.login?.authToken ?? undefined;
+            const refreshTokenString = response?.data?.login?.refreshToken ?? undefined;
+            if (authTokenString === undefined || refreshTokenString === undefined) {
+                return;
+            }
+            setAuthToken(saveAuthToken(authTokenString, refreshTokenString));
+        } catch(error) {
+            setErrorMessage(error.message);
+        }
+    }
     return (
         <Layout>
             <Typography component="h1" variant="h5">
@@ -34,28 +58,17 @@ export default function Login() {
             </Typography>
             <form
                 className={classes.form}
-                onSubmit={event => {
-                    event.preventDefault();
-                    loginUser({
-                        variables: {
-                            clientMutationId: "uniqueId",
-                            username: username,
-                            password: password
-                        },
-                    }).then(response => {
-                        setToken(response?.data?.login?.authToken ?? undefined);
-                    }).catch(error => {
-                        console.log(error);
-                    });
-                }}>
+                onSubmit={onSubmit}>
+                {errorMessage !== '' && <Alert severity="error">{errorMessage}</Alert>}
                 <TextField
                     variant="outlined"
                     margin="normal"
                     required
                     fullWidth
                     id="email"
-                    label="Email Address"
                     name="email"
+                    label="Email Address"
+                    type="email"
                     autoComplete="email"
                     autoFocus
                     value={username}
@@ -66,10 +79,10 @@ export default function Login() {
                     margin="normal"
                     required
                     fullWidth
+                    id="password"
                     name="password"
                     label="Password"
                     type="password"
-                    id="password"
                     autoComplete="current-password"
                     value={password}
                     onChange={event => setPassword(event.target.value ?? '')}
@@ -85,10 +98,9 @@ export default function Login() {
                     color="primary"
                     className={classes.submit}
                 >
-                    Login
+                    {loading || 'Login'}
+                    {loading && <CircularProgress size={24}/>}
                 </Button>
-                {mutationLoading && <p>Loading...</p>}
-                {mutationError && <p>Error :( Please try again</p>}
                 <Grid container>
                     <Grid item xs>
                         <Link to={'/password'}>
