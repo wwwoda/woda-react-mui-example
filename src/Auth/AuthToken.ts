@@ -1,12 +1,13 @@
 import JwtDecode from "jwt-decode";
 import {refreshAuthToken} from "../GraphQl/Mutation/RefreshAuthToken";
 
-let inMemoryAuthToken: undefined|AuthToken = undefined;
+const localStorageKey = 'auth_token';
+//let inMemoryAuthToken: undefined|AuthToken = undefined;
 
 export interface AuthToken {
     authToken: string,
     refreshToken: string,
-    expireDate: Date,
+    expireTimestamp: number,
     userId: number,
 }
 
@@ -19,34 +20,44 @@ export interface DecodedAuthToken {
 }
 
 export function clearAuthToken() {
-    inMemoryAuthToken = undefined;
+    //inMemoryAuthToken = undefined;
+    localStorage.removeItem(localStorageKey)
 }
 
 export function loadAuthToken() {
-    return inMemoryAuthToken;
+    //return inMemoryAuthToken;
+    const authTokenJson = localStorage.getItem(localStorageKey);
+    if (authTokenJson === null) {
+        return undefined;
+    }
+    return JSON.parse(authTokenJson) as AuthToken;
 }
 
-export function saveAuthToken(authToken: string, refreshToken: string) {
-    const decoded = JwtDecode(authToken) as DecodedAuthToken;
-    inMemoryAuthToken = {
-        authToken: authToken,
-        refreshToken: refreshToken,
-        expireDate: new Date(decoded.exp * 1000),
+export function saveAuthToken(authTokenString: string, refreshTokenString: string) {
+    const decoded = JwtDecode(authTokenString) as DecodedAuthToken;
+    const authToken: AuthToken = {
+        authToken: authTokenString,
+        refreshToken: refreshTokenString,
+        expireTimestamp: decoded.exp,
         userId: decoded.data.user.id,
-    }
-    console.log('saving authToken ', inMemoryAuthToken);
-    return inMemoryAuthToken;
+    };
+    console.log('saving authToken ', authToken);
+    //inMemoryAuthToken = authToken;
+    localStorage.setItem(localStorageKey, JSON.stringify(authToken));
+    return authToken;
 }
 
 export function isExpired() {
-    const isExpired = inMemoryAuthToken === undefined ? true : inMemoryAuthToken.expireDate < new Date();
+    const authToken = loadAuthToken();
+    const isExpired = authToken === undefined ? true : new Date(authToken.expireTimestamp * 1000) < new Date();
     console.log('isExpired ', isExpired)
     return isExpired;
 }
 
 export async function refresh() {
-    if (inMemoryAuthToken === undefined) {
+    const authToken = loadAuthToken();
+    if (authToken === undefined) {
         throw new Error('No authenticated! Can not refresh auth token.')
     }
-    return refreshAuthToken(inMemoryAuthToken)
+    return refreshAuthToken(authToken)
 }

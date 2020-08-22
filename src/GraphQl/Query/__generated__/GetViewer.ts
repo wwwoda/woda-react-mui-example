@@ -4,10 +4,10 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: GetUsers
+// GraphQL query operation: GetViewer
 // ====================================================
 
-export interface GetUsers_users_nodes_avatar {
+export interface GetViewer_viewer_avatar {
   __typename: "Avatar";
   /**
    * URL for the gravatar image source.
@@ -15,12 +15,12 @@ export interface GetUsers_users_nodes_avatar {
   url: string | null;
 }
 
-export interface GetUsers_users_nodes {
+export interface GetViewer_viewer {
   __typename: "User";
   /**
    * Avatar object for user. The avatar object can be retrieved in different sizes by specifying the size argument.
    */
-  avatar: GetUsers_users_nodes_avatar | null;
+  avatar: GetViewer_viewer_avatar | null;
   /**
    * A list of capabilities (permissions) granted to the user
    */
@@ -71,21 +71,13 @@ export interface GetUsers_users_nodes {
   username: string | null;
 }
 
-export interface GetUsers_users {
-  __typename: "RootQueryToUserConnection";
+export interface GetViewer {
   /**
-   * The nodes of the connection, without the edges
+   * Returns the current user
    */
-  nodes: (GetUsers_users_nodes | null)[] | null;
+  viewer: GetViewer_viewer | null;
 }
 
-export interface GetUsers {
-  /**
-   * Connection between the RootQuery type and the User type
-   */
-  users: GetUsers_users | null;
-}
-
-export interface GetUsersVariables {
+export interface GetViewerVariables {
   avatarSize?: number | null;
 }

@@ -20,7 +20,8 @@
     "roots/wp-config": "1.0.0",
     "roots/wp-password-bcrypt": "1.0.0",
     "wp-graphql/wp-graphql": "^0.12.1",
-    "wp-graphql/wp-graphql-jwt-authentication": "^0.4.1"
+    "wp-graphql/wp-graphql-jwt-authentication": "^0.4.1",
+    "valu/wp-graphql-offset-pagination": "^0.2.0"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "^3.5.6",
@@ -38,7 +39,8 @@
       "server/web/app/mu-plugins/{$name}/": [
         "type:wordpress-muplugin",
         "wp-graphql/wp-graphql",
-        "wp-graphql/wp-graphql-jwt-authentication"
+        "wp-graphql/wp-graphql-jwt-authentication",
+        "valu/wp-graphql-offset-pagination"
       ],
       "server/web/app/plugins/{$name}/": ["type:wordpress-plugin"],
       "server/web/app/themes/{$name}/": ["type:wordpress-theme"]

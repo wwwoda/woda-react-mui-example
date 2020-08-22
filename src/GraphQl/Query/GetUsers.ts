@@ -1,8 +1,7 @@
-import {useQuery} from '@apollo/react-hooks';
-import gql from 'graphql-tag';
+import {gql, useQuery} from "@apollo/client";
 import {GetUsers, GetUsersVariables} from "./__generated__/GetUsers";
 
-export const GET_POSTS = gql`
+export const GET_USERS = gql`
     query GetUsers($avatarSize: Int) {
         users {
             nodes {
@@ -26,4 +25,4 @@ export const GET_POSTS = gql`
     }
 `;
 
-export const useGetUsers = () => useQuery<GetUsers, GetUsersVariables>(GET_POSTS);
+export const useGetUsers = () => useQuery<GetUsers, GetUsersVariables>(GET_USERS);

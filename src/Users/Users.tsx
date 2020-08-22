@@ -4,8 +4,8 @@ import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import {Link as RouterLink} from 'react-router-dom';
 import {Button} from "@material-ui/core";
 import {Add} from "@material-ui/icons";
-import {Backend} from "../Component/Layout/Backend";
-import PostsTable from "./UsersTable";
+import {Layout} from "../Backend/Layout";
+import UsersTable from "./UsersTable";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export default function Posts() {
+export default function Users() {
     const classes = useStyles();
     const headerProps: HeaderProps = {
         actions: [
@@ -30,13 +30,13 @@ export default function Posts() {
         tabs: [
             {
                 label: 'Active',
-                content: <PostsTable/>,
+                content: <UsersTable/>,
             },
         ]
     };
     return (
-        <Backend>
+        <Layout>
             <Header {...headerProps}/>
-        </Backend>
+        </Layout>
     );
 }

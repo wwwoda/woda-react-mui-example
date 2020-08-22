@@ -1,5 +1,4 @@
-import Typography from "@material-ui/core/Typography";
-import Link from "@material-ui/core/Link";
+import {Link, Typography} from "@material-ui/core";
 import React from "react";
 
 export default function Copyright() {

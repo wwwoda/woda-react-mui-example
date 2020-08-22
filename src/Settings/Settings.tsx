@@ -5,7 +5,7 @@ import {Link as RouterLink} from 'react-router-dom';
 import {Button} from "@material-ui/core";
 import {Add} from "@material-ui/icons";
 import {Layout} from "../Backend/Layout";
-import PostsTable from "./PostsTable";
+import SettingsTable from "./SettingsTable";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export default function Posts() {
+export default function Settings() {
     const classes = useStyles();
     const headerProps: HeaderProps = {
         actions: [
@@ -26,11 +26,11 @@ export default function Posts() {
                     component={RouterLink}
                     to="/posts/create">Add new</Button>,
         ],
-        title: 'Posts',
+        title: 'Users',
         tabs: [
             {
                 label: 'Active',
-                content: <PostsTable/>,
+                content: <SettingsTable/>,
             },
         ]
     };

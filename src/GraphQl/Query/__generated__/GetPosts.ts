@@ -43,12 +43,56 @@ export interface GetPosts_posts_nodes {
   featuredImage: GetPosts_posts_nodes_featuredImage | null;
 }
 
+export interface GetPosts_posts_pageInfo_offsetPagination {
+  __typename: "OffsetPaginationPageInfo";
+  /**
+   * True if there is one or more nodes available in this connection. Eg. you can increase the offset at least by one.
+   */
+  hasMore: boolean | null;
+  /**
+   * True when offset can be decresed eg. offset is 0&lt;
+   */
+  hasPrevious: boolean | null;
+  /**
+   * Total amount of nodes in this connection
+   */
+  total: number | null;
+}
+
+export interface GetPosts_posts_pageInfo {
+  __typename: "WPPageInfo";
+  /**
+   * When paginating forwards, are there more items?
+   */
+  hasNextPage: boolean;
+  /**
+   * When paginating backwards, are there more items?
+   */
+  hasPreviousPage: boolean;
+  /**
+   * When paginating backwards, the cursor to continue.
+   */
+  startCursor: string | null;
+  /**
+   * When paginating forwards, the cursor to continue.
+   */
+  endCursor: string | null;
+  /**
+   * Get information about the offset pagination state in the current connection
+   */
+  offsetPagination: GetPosts_posts_pageInfo_offsetPagination | null;
+}
+
 export interface GetPosts_posts {
   __typename: "RootQueryToPostConnection";
   /**
    * The nodes of the connection, without the edges
    */
   nodes: (GetPosts_posts_nodes | null)[] | null;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo: GetPosts_posts_pageInfo | null;
 }
 
 export interface GetPosts {
@@ -56,4 +100,9 @@ export interface GetPosts {
    * Connection between the RootQuery type and the post type
    */
   posts: GetPosts_posts | null;
+}
+
+export interface GetPostsVariables {
+  size?: number | null;
+  offset?: number | null;
 }

@@ -1414,6 +1414,16 @@ type NodeWithRevisionsToContentNodeConnectionEdge {
     node: ContentNode
 }
 
+"Get information about the offset pagination state"
+type OffsetPaginationPageInfo {
+    "True if there is one or more nodes available in this connection. Eg. you can increase the offset at least by one."
+    hasMore: Boolean
+    "True when offset can be decresed eg. offset is 0&lt;"
+    hasPrevious: Boolean
+    "Total amount of nodes in this connection"
+    total: Int
+}
+
 "The page type"
 type Page implements ContentNode & DatabaseIdentifier & HierarchicalContentNode & MenuItemLinkable & Node & NodeWithAuthor & NodeWithComments & NodeWithContentEditor & NodeWithFeaturedImage & NodeWithPageAttributes & NodeWithRevisions & NodeWithTitle & UniformResourceIdentifiable {
     "Returns ancestors of the node. Default ordered as lowest (closest to the child) to highest (closest to the root)."
@@ -3630,6 +3640,8 @@ type WPPageInfo {
     hasNextPage: Boolean!
     "When paginating backwards, are there more items?"
     hasPreviousPage: Boolean!
+    "Get information about the offset pagination state in the current connection"
+    offsetPagination: OffsetPaginationPageInfo
     "When paginating backwards, the cursor to continue."
     startCursor: String
 }
@@ -4847,6 +4859,14 @@ input MenuToMenuItemConnectionWhereArgs {
     parentId: ID
 }
 
+"Offset pagination input type"
+input OffsetPagination {
+    "Number of post to show per page. Passed to posts_per_page of WP_Query."
+    offset: Int
+    "Number of post to show per page. Passed to posts_per_page of WP_Query."
+    size: Int
+}
+
 "Arguments for filtering the PageToCommentConnection connection"
 input PageToCommentConnectionWhereArgs {
     "Comment author email address."
@@ -5524,6 +5544,8 @@ input RootQueryToContentNodeConnectionWhereArgs {
     nameIn: [String]
     "Specify IDs NOT to retrieve. If this is used in the same query as \"in\", it will be ignored"
     notIn: [ID]
+    "Paginate content nodes with offsets"
+    offsetPagination: OffsetPagination
     "What paramater to use to order the objects by."
     orderby: [PostObjectsConnectionOrderbyInput]
     "Use ID to return only children. Use 0 to return only top-level items"
@@ -5604,6 +5626,8 @@ input RootQueryToMediaItemConnectionWhereArgs {
     nameIn: [String]
     "Specify IDs NOT to retrieve. If this is used in the same query as \"in\", it will be ignored"
     notIn: [ID]
+    "Paginate MediaItems with offsets"
+    offsetPagination: OffsetPagination
     "What paramater to use to order the objects by."
     orderby: [PostObjectsConnectionOrderbyInput]
     "Use ID to return only children. Use 0 to return only top-level items"
@@ -5670,6 +5694,8 @@ input RootQueryToPageConnectionWhereArgs {
     nameIn: [String]
     "Specify IDs NOT to retrieve. If this is used in the same query as \"in\", it will be ignored"
     notIn: [ID]
+    "Paginate Pages with offsets"
+    offsetPagination: OffsetPagination
     "What paramater to use to order the objects by."
     orderby: [PostObjectsConnectionOrderbyInput]
     "Use ID to return only children. Use 0 to return only top-level items"
@@ -5722,6 +5748,8 @@ input RootQueryToPostConnectionWhereArgs {
     nameIn: [String]
     "Specify IDs NOT to retrieve. If this is used in the same query as \"in\", it will be ignored"
     notIn: [ID]
+    "Paginate Posts with offsets"
+    offsetPagination: OffsetPagination
     "What paramater to use to order the objects by."
     orderby: [PostObjectsConnectionOrderbyInput]
     "Use ID to return only children. Use 0 to return only top-level items"
@@ -5900,6 +5928,8 @@ input RootQueryToUserConnectionWhereArgs {
     nicenameIn: [String]
     "An array of nicenames to exclude. Users matching one of these nicenames will not be included in results."
     nicenameNotIn: [String]
+    "Paginate users with offsets"
+    offsetPagination: OffsetPagination
     "What paramater to use to order the objects by."
     orderby: [UsersConnectionOrderbyInput]
     "An array of role names that users must match to be included in results. Note that this is an inclusive list: users must match *each* role."

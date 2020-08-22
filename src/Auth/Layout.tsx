@@ -6,8 +6,8 @@ import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import {makeStyles, Theme} from '@material-ui/core/styles';
 import {Redirect} from "react-router-dom";
-import Copyright from "../Component/Global/Copyright";
 import {userContext} from "./UserProvider";
+import Copyright from "../Component/Copyright";
 
 interface LayoutProps {
     children?: ReactNode;
