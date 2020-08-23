@@ -33,3 +33,17 @@ npm start
 ```
 
 ## Notes
+
+### Authentication with JWT
+
+Currently, both, the auth and refresh token, are stored in localStorage.
+This is not best practice but was a simple way to persist auth state across browser refresh.
+Research better alternatives here: 
+
+* https://hasura.io/blog/best-practices-of-using-jwt-with-graphql/#jwt_persist
+* https://github.com/wp-graphql/wp-graphql-jwt-authentication
+
+### Refreshing the JWT
+
+Currently, the auth token will be refreshed when it is expired when a request has to be done.
+Maybe it would be better to silently refesh it in the background whenever it expires.  
