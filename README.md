@@ -1,28 +1,35 @@
 # React Mui WP GraphQl Example
 
-Example backend build with React and Material Design. Data is synced via GraphQl and Apollo from a WordPress server.
+Example backend build with React and Material Design. 
+Reads data from a GraphQl API WordPress server with the WPGraphQL plugin.
 
-## How to run
+## Setup
 
-Install & Start server
+Install dependencies
 
 ```sh
 composer install
-cp .env.example .env
+npm install
 ```
 
 Create the database and fill details in `.env` file
-It is expected you have WP-CLI installed globally
+
+```sh
+cp .env.example .env
+```
+
+Setup server (This sets up the wordpress database with the expected configuration)
  
 ```sh
 ./setup-server.sh
-./generate-data-on-server.sh
-wp server --host=localhost --port=3001
 ```
 
-Install the client dependencies and start react app
+## Start server & client
+
+Start server and react app
 
 ```sh
-npm install
 npm start
 ```
+
+## Notes

@@ -89,7 +89,7 @@ export default function PostsTable() {
     const classes = useStyles2();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
-    const {loading, error, data} = useGetPosts({size: rowsPerPage, offset: page * rowsPerPage});
+    const {loading, error, data} = useGetPosts({size: rowsPerPage, offset: page * rowsPerPage}, {});
     if (error) {
         return <>Error :( {error.message}</>;
     }

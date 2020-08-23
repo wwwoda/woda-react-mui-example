@@ -7,22 +7,6 @@
 // GraphQL query operation: GetPosts
 // ====================================================
 
-export interface GetPosts_posts_nodes_featuredImage_node {
-  __typename: "MediaItem";
-  /**
-   * The globally unique identifier of the attachment object.
-   */
-  id: string;
-}
-
-export interface GetPosts_posts_nodes_featuredImage {
-  __typename: "NodeWithFeaturedImageToMediaItemConnectionEdge";
-  /**
-   * The nodes of the connection, without the edges
-   */
-  node: GetPosts_posts_nodes_featuredImage_node | null;
-}
-
 export interface GetPosts_posts_nodes {
   __typename: "Post";
   /**
@@ -37,10 +21,6 @@ export interface GetPosts_posts_nodes {
    * Post publishing date.
    */
   date: string | null;
-  /**
-   * Connection between the NodeWithFeaturedImage type and the MediaItem type
-   */
-  featuredImage: GetPosts_posts_nodes_featuredImage | null;
 }
 
 export interface GetPosts_posts_pageInfo_offsetPagination {
@@ -61,22 +41,6 @@ export interface GetPosts_posts_pageInfo_offsetPagination {
 
 export interface GetPosts_posts_pageInfo {
   __typename: "WPPageInfo";
-  /**
-   * When paginating forwards, are there more items?
-   */
-  hasNextPage: boolean;
-  /**
-   * When paginating backwards, are there more items?
-   */
-  hasPreviousPage: boolean;
-  /**
-   * When paginating backwards, the cursor to continue.
-   */
-  startCursor: string | null;
-  /**
-   * When paginating forwards, the cursor to continue.
-   */
-  endCursor: string | null;
   /**
    * Get information about the offset pagination state in the current connection
    */
@@ -105,4 +69,5 @@ export interface GetPosts {
 export interface GetPostsVariables {
   size?: number | null;
   offset?: number | null;
+  title?: string | null;
 }

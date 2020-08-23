@@ -3,11 +3,14 @@
   "version": "4.0.0",
   "private": true,
   "scripts": {
-    "start": "react-scripts start",
+    "install-all": "npm install && composer install",
+    "start-server": "server/vendor/bin/wp server --host=localhost --port=3001 --quiet",
+    "start-client": "react-scripts start",
+    "start": "npm run install-all && concurrently \"npm run start-server\" \"npm run start-client\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "graphql-types": "apollo codegen:generate --localSchemaFile=schema.graphql --target=typescript --addTypename --includes=src/**/*.ts* --globalTypesFile=src/graphql/globalTypes.ts --passthroughCustomScalars --customScalarsPrefix=GqlScalar",
+    "graphql-types": "apollo codegen:generate --localSchemaFile=server/web/app/mu-plugins/wp-graphql/schema.graphql --target=typescript --addTypename --includes=src/**/*.ts* --globalTypesFile=src/graphql/globalTypes.ts --passthroughCustomScalars --customScalarsPrefix=GqlScalar",
     "graphql-codegen": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
@@ -16,10 +19,8 @@
     "@material-ui/core": "latest",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.56",
-    "apollo-link-error": "^1.1.13",
     "clsx": "latest",
     "graphql": "^15.3.0",
-    "idb-keyval": "^3.2.0",
     "jwt-decode": "^2.2.0",
     "react": "latest",
     "react-dom": "^16.13.1",
@@ -42,7 +43,8 @@
     "@types/react": "^16.8.4",
     "@types/react-dom": "^16.8.2",
     "@types/react-helmet": "^6.1.0",
-    "@types/react-router-dom": "^5.1.0"
+    "@types/react-router-dom": "^5.1.0",
+    "concurrently": "^5.3.0"
   },
   "eslintConfig": {
     "extends": "react-app"
