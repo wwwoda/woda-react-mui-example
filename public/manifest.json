@@ -3,7 +3,7 @@
   "name": "Example backend build with React and Material Design. Data is synced via GraphQl and Apollo from a WordPress server.",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "favicon.png",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     }

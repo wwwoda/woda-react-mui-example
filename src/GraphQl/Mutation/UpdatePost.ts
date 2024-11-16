@@ -1,5 +1,4 @@
-import {gql, useMutation} from "@apollo/client";
-import {UpdatePost, UpdatePostVariables} from "./__generated__/UpdatePost";
+import {gql} from "@apollo/client";
 
 export const UPDATE_POST = gql`
     mutation UpdatePost($clientMutationId: String!, $id: ID!, $title: String!) {
@@ -12,5 +11,3 @@ export const UPDATE_POST = gql`
         }
     }
 `;
-
-export const useUpdatePost = () => useMutation<UpdatePost, UpdatePostVariables>(UPDATE_POST);

@@ -1,60 +1,47 @@
-import React from 'react';
-import {Layout} from "../Backend/Layout";
 import {
-    AppBar,
     Container,
-    createStyles,
-    Grid,
-    makeStyles,
     TextField,
-    Theme,
-    Toolbar,
-    Typography
-} from "@material-ui/core";
-
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        title: {
-            flexGrow: 1,
-        },
-        form: {
-            width: '100%', // Fix IE 11 issue.
-            marginTop: theme.spacing(1),
-            '& > *': {
-                margin: theme.spacing(1),
-                width: '25ch',
-            },
-        },
-        field: {
-            width: '100%',
-        },
-        container: {
-            paddingTop: theme.spacing(4),
-            paddingBottom: theme.spacing(4),
-        },
-    }),
-);
+} from "@mui/material";
+import Header from "../Component/Header/Header.tsx";
+import {Form} from "react-router-dom";
+import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
 
 export default function CreatePost() {
-    const classes = useStyles();
+    const handleCancel = () => {
+
+    };
+
     return (
-        <Layout>
-            <AppBar position="static" color="default">
-                <Toolbar>
-                    <Typography variant="h6" className={classes.title}>Create Post</Typography>
-                </Toolbar>
-            </AppBar>
-            <Container maxWidth="lg" className={classes.container}>
-                <Grid container spacing={3}>
-                    <form className={classes.form} noValidate autoComplete="off">
+        <>
+            <Header title={'Create Post'} actions={[]} tabs={[]} />
+            <Container maxWidth="lg" sx={{py: 4}}>
+                <Form
+                    method="POST"
+                    style={{
+                        width: '100%',
+                    }}
+                    autoComplete="off"
+                >
+                    <Stack spacing={2}>
                         <TextField
-                            className={classes.field}
+                            name="title"
                             variant="outlined"
+                            label="Title"
                             fullWidth
-                            label="Title"/>
-                    </form>
-                </Grid>
+                            required
+                        />
+                        <Stack spacing={1} direction="row" justifyContent="flex-end">
+                            <Button onClick={handleCancel} variant="outlined" color="secondary">
+                                Cancel
+                            </Button>
+                            <Button type="submit" variant="contained" color="primary">
+                                Save
+                            </Button>
+                        </Stack>
+                    </Stack>
+                </Form>
             </Container>
-        </Layout>
+        </>
     );
 }

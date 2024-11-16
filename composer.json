@@ -14,34 +14,36 @@
       "package": {
         "name": "funkhaus/wp-graphql-cors",
         "type": "wordpress-plugin",
-        "version": "1.1.0",
+        "version": "2.1.1",
         "dist": {
-          "url": "https://github.com/funkhaus/wp-graphql-cors/archive/v1.1.0.zip",
+          "url": "https://github.com/funkhaus/wp-graphql-cors/archive/2.1.1.zip",
           "type": "zip"
         },
         "source": {
           "url": "https://github.com/funkhaus/wp-graphql-cors",
           "type": "git",
-          "reference": "tree/v1.1.0"
+          "reference": "2.1.1"
         }
       }
     }
   ],
   "require": {
-    "php": ">=7.2",
-    "composer/installers": "^1.8",
-    "funkhaus/wp-graphql-cors": "^1.1",
+    "php": ">=8.3",
+    "composer/installers": "^2.2",
     "oscarotero/env": "^2.1",
+    "wpackagist-theme/twentytwentyfive": "^1.0",
+    "funkhaus/wp-graphql-cors": "^2.1",
     "roots/bedrock-autoloader": "^1.0",
-    "roots/wordpress": "5.5",
+    "roots/bedrock-disallow-indexing": "^2.0",
+    "roots/wordpress": "6.7",
     "roots/wp-config": "1.0.0",
-    "roots/wp-password-bcrypt": "1.0.0",
+    "roots/wp-password-bcrypt": "1.2.0",
     "valu/wp-graphql-offset-pagination": "^0.2.0",
-    "vlucas/phpdotenv": "^4.1",
-    "wp-graphql/wp-graphql": "^0.12.1",
-    "wp-graphql/wp-graphql-acf": "^0.3.5",
-    "wp-graphql/wp-graphql-jwt-authentication": "^0.4.1",
-    "wpackagist-plugin/advanced-custom-fields": "^5.9"
+    "vlucas/phpdotenv": "^5.5",
+    "wp-graphql/wp-graphql": "^1.0",
+    "wp-graphql/wpgraphql-acf": "^2.4",
+    "wp-graphql/wp-graphql-jwt-authentication": "^0.7.0",
+    "wpackagist-plugin/advanced-custom-fields": "^6.0"
   },
   "require-dev": {
     "roave/security-advisories": "dev-master",
@@ -52,7 +54,11 @@
     "sort-packages": true,
     "optimize-autoloader": true,
     "preferred-install": "dist",
-    "vendor-dir": "server/vendor"
+    "vendor-dir": "server/vendor",
+    "allow-plugins": {
+      "composer/installers": true,
+      "roots/wordpress-core-installer": true
+    }
   },
   "minimum-stability": "dev",
   "prefer-stable": true,
@@ -64,7 +70,7 @@
         "valu/wp-graphql-offset-pagination",
         "wp-graphql/wp-graphql",
         "wp-graphql/wp-graphql-jwt-authentication",
-        "wp-graphql/wp-graphql-acf",
+        "wp-graphql/wpgraphql-acf",
         "wpackagist-plugin/advanced-custom-fields"
       ],
       "server/web/app/plugins/{$name}/": ["type:wordpress-plugin"],

@@ -1,5 +1,4 @@
-import {gql, useQuery} from "@apollo/client";
-import {GetViewer, GetViewerVariables} from "./__generated__/GetViewer";
+import {gql} from "@apollo/client";
 
 export const GET_VIEWER = gql`
     query GetViewer($avatarSize: Int) {
@@ -22,5 +21,3 @@ export const GET_VIEWER = gql`
         }
     }
 `;
-
-export const useGetViewer = () => useQuery<GetViewer, GetViewerVariables>(GET_VIEWER);

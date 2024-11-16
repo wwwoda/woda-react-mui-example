@@ -1,5 +1,4 @@
-import {gql, useQuery} from "@apollo/client";
-import {GetPosts} from "./__generated__/GetPosts";
+import {gql} from "@apollo/client";
 
 export const GET_SETTINGS = gql`
     query GetSettings {
@@ -8,5 +7,3 @@ export const GET_SETTINGS = gql`
         }
     }
 `;
-
-export const useGetPosts = () => useQuery<GetPosts>(GET_SETTINGS);

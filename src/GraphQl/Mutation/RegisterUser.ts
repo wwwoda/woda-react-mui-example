@@ -1,13 +1,12 @@
-import {gql, useMutation} from "@apollo/client";
-import {RegisterUser, RegisterUserVariables} from "./__generated__/RegisterUser";
+import {gql} from "@apollo/client";
 
 export const REGISTER_USER = gql`
     mutation RegisterUser(
-        $clientMutationId: String!, 
-        $username: String!, 
-        $password: String!, 
-        $email: String!, 
-        $firstName: String, 
+        $clientMutationId: String!,
+        $username: String!,
+        $password: String!,
+        $email: String!,
+        $firstName: String,
         $lastName: String
     ) {
         registerUser(
@@ -26,5 +25,3 @@ export const REGISTER_USER = gql`
         }
     }
 `;
-
-export const useRegisterUser = () => useMutation<RegisterUser, RegisterUserVariables>(REGISTER_USER);

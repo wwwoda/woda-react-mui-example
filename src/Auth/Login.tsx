@@ -1,36 +1,26 @@
-import React, {FormEvent} from 'react';
-import Alert from '@material-ui/lab/Alert';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Grid from '@material-ui/core/Grid';
-import {makeStyles, Theme} from '@material-ui/core/styles';
-import Typography from "@material-ui/core/Typography";
+import {FormEvent, useState} from 'react';
+import Alert from '@mui/material/Alert';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import CircularProgress from '@mui/material/CircularProgress';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Typography from "@mui/material/Typography";
 import {Layout} from "./Layout";
-import {useLoginUser} from "../GraphQl/Mutation/LoginUser";
-import {Link} from "react-router-dom";
-import {userContext} from "./UserProvider";
-import {saveAuthToken} from "./AuthToken";
-
-const useStyles = makeStyles((theme: Theme) => ({
-    form: {
-        width: '100%', // Fix IE 11 issue.
-        marginTop: theme.spacing(1),
-    },
-    submit: {
-        margin: theme.spacing(3, 0, 2),
-    },
-}));
+import {useUserContext} from "./UserProvider";
+import {Form, Navigate} from "react-router-dom";
+import {useLoginUserMutation} from "../GraphQl/Generated/types.ts";
+import Stack from "@mui/material/Stack";
+import Box from "@mui/material/Box";
+import {Link} from "@mui/material";
 
 export default function Login() {
-    const classes = useStyles();
-    const [errorMessage, setErrorMessage] = React.useState('');
-    const [username, setUsername] = React.useState('');
-    const [password, setPassword] = React.useState('');
-    const [loginUser, { loading }] = useLoginUser();
-    const {setAuthToken} = React.useContext(userContext);
+    const [errorMessage] = useState('');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [loginUser, { loading }] = useLoginUserMutation();
+    const {login, user} = useUserContext();
+
     const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         try {
@@ -46,18 +36,26 @@ export default function Login() {
             if (authTokenString === undefined || refreshTokenString === undefined) {
                 return;
             }
-            setAuthToken(saveAuthToken(authTokenString, refreshTokenString));
+            login(authTokenString, refreshTokenString);
         } catch(error) {
-            setErrorMessage(error.message);
+            console.error('Error logging in:', error);
         }
     }
+
+    if (user !== undefined) {
+        return <Navigate to="/" replace={true} />
+    }
+
     return (
         <Layout>
             <Typography component="h1" variant="h5">
                 Login
             </Typography>
-            <form
-                className={classes.form}
+            <Form
+                style={{
+                    width: '100%', // Fix IE 11 issue.
+                    marginTop: '1rem',
+                }}
                 onSubmit={onSubmit}>
                 {errorMessage !== '' && <Alert severity="error">{errorMessage}</Alert>}
                 <TextField
@@ -96,24 +94,28 @@ export default function Login() {
                     fullWidth
                     variant="contained"
                     color="primary"
-                    className={classes.submit}
+                    sx={(theme) => ({
+                        margin: theme.spacing(3, 0, 2),
+                    })}
                 >
                     {loading || 'Login'}
                     {loading && <CircularProgress size={24}/>}
                 </Button>
-                <Grid container>
-                    <Grid item xs>
-                        <Link to={'/password'}>
-                            Forgot password?
+                <Stack direction="row">
+                    <Box>
+                        <Link href={'/password'}>
+                            {'Forgot password?'}
+
                         </Link>
-                    </Grid>
-                    <Grid item>
-                        <Link to={'/signup'}>
-                            {"Don't have an account? Sign Up"}
+                    </Box>
+                    <Box sx={{flexGrow: 1}}></Box>
+                    <Box>
+                        <Link href={'/signup'}>
+                            {'Don\'t have an account? Sign Up'}
                         </Link>
-                    </Grid>
-                </Grid>
-            </form>
+                    </Box>
+                </Stack>
+            </Form>
         </Layout>
     )
 };

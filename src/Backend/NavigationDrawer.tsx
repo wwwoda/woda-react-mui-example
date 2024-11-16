@@ -1,47 +1,34 @@
-import React from "react";
-import PrimaryMenu from "./PrimaryMenu";
-import SecondaryMenu from "./SecondaryMenu";
-import {Divider, Drawer, makeStyles, Theme} from "@material-ui/core";
+import { styled } from '@mui/material/styles';
+import MuiDrawer, { drawerClasses } from '@mui/material/Drawer';
+import MenuContent from './MenuContent';
+import UserCard from "./UserCard.tsx";
 
 const drawerWidth = 240;
 
-const useStyles = makeStyles((theme: Theme) => ({
-    appBarSpacer: theme.mixins.toolbar,
-    drawer: {
+const Drawer = styled(MuiDrawer)({
+    width: drawerWidth,
+    flexShrink: 0,
+    boxSizing: 'border-box',
+    mt: 10,
+    [`& .${drawerClasses.paper}`]: {
         width: drawerWidth,
-        flexShrink: 0,
+        boxSizing: 'border-box',
     },
-    drawerContainer: {
-        overflow: 'auto',
-    },
-    drawerPaper: {
-        position: 'relative',
-        whiteSpace: 'nowrap',
-        width: drawerWidth,
-        transition: theme.transitions.create('width', {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-    },
-}));
+});
 
 export default function NavigationDrawer() {
-    const classes = useStyles();
     return (
         <Drawer
-            className={classes.drawer}
             variant="permanent"
-            classes={{
-                paper: classes.drawerPaper,
+            sx={{
+                display: { xs: 'none', md: 'block' },
+                [`& .${drawerClasses.paper}`]: {
+                    backgroundColor: 'background.paper',
+                },
             }}
         >
-            <div className={classes.appBarSpacer} />
-            <div className={classes.drawerContainer}>
-                <Divider/>
-                <PrimaryMenu/>
-                <Divider/>
-                <SecondaryMenu/>
-            </div>
+            <UserCard />
+            <MenuContent />
         </Drawer>
     );
 }

@@ -1,9 +1,8 @@
-import {gql, useMutation} from "@apollo/client";
-import {CreatePost, CreatePostVariables} from "./__generated__/CreatePost";
+import {gql} from "@apollo/client";
 
 export const CREATE_POST = gql`
     mutation CreatePost($clientMutationId: String!, $title: String!) {
-        createPost(input: {clientMutationId: $clientMutationId, title: $title}) {
+        createPost(input: {clientMutationId: $clientMutationId, title: $title, status: PUBLISH}) {
             post {
                 id
                 title
@@ -12,5 +11,3 @@ export const CREATE_POST = gql`
         }
     }
 `;
-
-export const useCreatePost = () => useMutation<CreatePost, CreatePostVariables>(CREATE_POST);

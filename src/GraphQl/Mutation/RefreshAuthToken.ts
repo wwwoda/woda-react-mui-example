@@ -1,6 +1,7 @@
-import {gql, useMutation} from "@apollo/client";
-import {RefreshAuthToken, RefreshAuthTokenVariables} from "./__generated__/RefreshAuthToken";
+import {gql} from "@apollo/client";
 import {AuthToken, saveAuthToken} from "../../Auth/AuthToken";
+import {RefreshAuthTokenMutation, RefreshAuthTokenMutationVariables} from "../Generated/types.ts";
+import {client} from "../client.ts";
 
 const REFRESH_AUTH_TOKEN = gql`
     mutation RefreshAuthToken($clientMutationId: String!, $refreshToken: String!) {
@@ -14,28 +15,12 @@ const REFRESH_AUTH_TOKEN = gql`
     }
 `;
 
-export const useRefreshAuthToken = () => useMutation<RefreshAuthToken, RefreshAuthTokenVariables>(REFRESH_AUTH_TOKEN);
-
-// Needed because we cant use hooks in GraphQl/customFetch.ts
-const refreshTokenMutation = (clientMutationId: string, refreshToken: string) => {
-    return JSON.stringify({
-        variables: {clientMutationId: clientMutationId, refreshToken: refreshToken},
-        query: REFRESH_AUTH_TOKEN.loc && REFRESH_AUTH_TOKEN.loc.source.body,
-    });
-};
 export const refreshAuthToken = async (authToken: AuthToken) => {
-    // @todo get endpoint url from centralized place
-    const response = await fetch('http://localhost:3001/wp/graphql/', {
-        headers: {
-            'content-type': 'application/json',
-            Authorization: `bearer ${authToken.authToken}`,
-        },
-        method: 'POST',
-        body: refreshTokenMutation('uniqueId', authToken.refreshToken),
-    });
-    const text = await response.text();
-    const json = await JSON.parse(text);
-    const authTokenString = json?.data?.refreshJwtAuthToken?.authToken ?? undefined;
+    const response = await client.mutate<RefreshAuthTokenMutation, RefreshAuthTokenMutationVariables>({
+        mutation: REFRESH_AUTH_TOKEN,
+        variables: {clientMutationId: 'uniqueId', refreshToken: authToken.refreshToken},
+    })
+    const authTokenString = response?.data?.refreshJwtAuthToken?.authToken ?? undefined;
     if (authTokenString === undefined) {
         throw new Error('Error when refreshing auth token.');
     }

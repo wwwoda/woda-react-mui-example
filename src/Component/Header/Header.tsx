@@ -1,15 +1,5 @@
 import React, {ChangeEvent, ReactNode} from 'react';
-import {AppBar, Box, makeStyles, Tab, Tabs, Theme, Toolbar, Typography} from "@material-ui/core";
-
-
-const useStyles = makeStyles((theme: Theme) => ({
-    title: {
-        flexGrow: 1,
-    },
-    tabPanel: {
-        width: '100%',
-    }
-}));
+import {AppBar, Box, BoxProps, Tab, Tabs, Toolbar, Typography} from "@mui/material";
 
 function a11yProps(index: number) {
     return {
@@ -18,19 +8,17 @@ function a11yProps(index: number) {
     };
 }
 
-interface TabPanel {
+interface TabPanelProps extends BoxProps {
     children: ReactNode,
     index: number,
     value: number,
-    classNames: string,
 }
 
-function TabPanel(props: TabPanel) {
-    const {children, classNames, value, index, ...other} = props;
+function TabPanel(props: TabPanelProps) {
+    const {children, value, index, ...other} = props;
     return (
-        <div
+        <Box
             role="tabpanel"
-            className={classNames}
             hidden={value !== index}
             id={`scrollable-auto-tabpanel-${index}`}
             aria-labelledby={`scrollable-auto-tab-${index}`}
@@ -38,10 +26,10 @@ function TabPanel(props: TabPanel) {
         >
             {value === index && (
                 <Box p={3}>
-                    <Typography>{children}</Typography>
+                    {children}
                 </Box>
             )}
-        </div>
+        </Box>
     );
 }
 
@@ -57,16 +45,18 @@ export interface HeaderProps {
 }
 
 export default function Header({title, actions, tabs}: HeaderProps) {
-    const classes = useStyles();
     const [value, setValue] = React.useState(0);
+
     const handleChange = (event: ChangeEvent<{}>, value: any): void => {
+        event.preventDefault();
         setValue(value);
     };
+
     return (
         <>
             <AppBar position="static" color="default">
                 <Toolbar>
-                    <Typography variant="h6" className={classes.title}>{title}</Typography>
+                    <Typography variant="h6" sx={{flexGrow: 1}}>{title}</Typography>
                     {actions}
                 </Toolbar>
                 <Tabs
@@ -76,12 +66,12 @@ export default function Header({title, actions, tabs}: HeaderProps) {
                     textColor="primary"
                 >
                     {tabs.map((tab, i) => (
-                        <Tab key={i} label={tab.label} {...a11yProps(i)}/>
+                        <Tab key={`tab${i}`} label={tab.label} {...a11yProps(i)}/>
                     ))}
                 </Tabs>
             </AppBar>
             {tabs.map((tab, i) => (
-                <TabPanel classNames={classes.tabPanel} value={value} index={i}>{tab.content}</TabPanel>
+                <TabPanel sx={{width: '100%'}} value={value} index={i} key={`tabpanel${i}`}>{tab.content}</TabPanel>
             ))}
         </>
     );

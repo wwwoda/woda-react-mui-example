@@ -3,7 +3,7 @@ import customFetch from "./customFetch";
 
 const httpLink = createHttpLink({
     uri: 'http://localhost:3001/wp/graphql/',
-    credentials: 'include',
+    credentials: 'omit',
     fetch: customFetch
 });
 

@@ -9,7 +9,7 @@ Install dependencies
 
 ```sh
 composer install
-npm install
+pnpm install
 ```
 
 Create the database and fill details in `.env` file
@@ -21,7 +21,7 @@ cp .env.example .env
 Setup server (This sets up the wordpress database with the expected configuration)
  
 ```sh
-./setup-server.sh
+./bin/setup-server.sh
 ```
 
 ## Start server & client
@@ -29,7 +29,7 @@ Setup server (This sets up the wordpress database with the expected configuratio
 Start server and react app
 
 ```sh
-npm start
+pnpm start
 ```
 
 ## Notes

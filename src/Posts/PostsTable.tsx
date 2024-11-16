@@ -1,8 +1,5 @@
-import React from "react";
+import React, {useState} from "react";
 import {
-    createStyles,
-    IconButton,
-    makeStyles,
     Paper,
     Table,
     TableBody,
@@ -12,100 +9,35 @@ import {
     TableHead,
     TablePagination,
     TableRow,
-    Theme
-} from "@material-ui/core";
-import {useGetPosts} from "../GraphQl/Query/GetPosts";
-import {GetPosts_posts_nodes, GetPosts_posts_pageInfo} from "../GraphQl/Query/__generated__/GetPosts";
-import {FirstPage, KeyboardArrowLeft, KeyboardArrowRight, LastPage} from "@material-ui/icons";
-
-const useStyles1 = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            flexShrink: 0,
-            marginLeft: theme.spacing(2.5),
-        },
-    }),
-);
-
-interface TablePaginationActionsProps {
-    count: number;
-    page: number;
-    rowsPerPage: number;
-    onChangePage: (event: React.MouseEvent<HTMLButtonElement>, newPage: number) => void;
-}
-
-function TablePaginationActions(props: TablePaginationActionsProps) {
-    const classes = useStyles1();
-    const {count, page, rowsPerPage, onChangePage} = props;
-    const handleFirstPageButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        onChangePage(event, 0);
-    };
-    const handleBackButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        onChangePage(event, page - 1);
-    };
-    const handleNextButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        onChangePage(event, page + 1);
-    };
-    const handleLastPageButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
-    };
-    return (
-        <div className={classes.root}>
-            <IconButton
-                onClick={handleFirstPageButtonClick}
-                disabled={page === 0}
-                aria-label="first page"
-                children={<FirstPage/>}/>
-            <IconButton
-                onClick={handleBackButtonClick}
-                disabled={page === 0}
-                aria-label="previous page"
-                children={<KeyboardArrowLeft/>}/>
-            <IconButton
-                onClick={handleNextButtonClick}
-                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-                aria-label="next page"
-                children={<KeyboardArrowRight/>}/>
-            <IconButton
-                onClick={handleLastPageButtonClick}
-                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-                aria-label="last page"
-                children={<LastPage/>}/>
-        </div>
-    );
-}
-
-const useStyles2 = makeStyles((theme: Theme) => ({
-    container: {
-        width: '100%',
-    },
-    backdrop: {
-        zIndex: theme.zIndex.drawer + 1,
-        color: '#fff',
-    },
-}));
+} from "@mui/material";
+import {useGetPostsQuery} from "../GraphQl/Generated/types.ts";
 
 export default function PostsTable() {
-    const classes = useStyles2();
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
-    const {loading, error, data} = useGetPosts({size: rowsPerPage, offset: page * rowsPerPage}, {});
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const {error, data} = useGetPostsQuery({variables: {size: rowsPerPage, offset: page * rowsPerPage, title: ''}});
+
     if (error) {
-        return <>Error :( {error.message}</>;
+        return <>Error: {error.message}</>;
     }
+
     const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+        event?.preventDefault();
         setPage(newPage);
     };
-    const handleChangeRowsPerPage = (
+
+    const handleRowsPerPageChange = (
         event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     ) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
-    const rows = data?.posts?.nodes as GetPosts_posts_nodes[] ?? [];
-    const pageInfo = data?.posts?.pageInfo as GetPosts_posts_pageInfo ?? undefined;
+
+    const rows = data?.posts?.nodes ?? [];
+    const pageInfo = data?.posts?.pageInfo ?? undefined;
+
     return (
-        <TableContainer component={Paper} className={classes.container}>
+        <TableContainer component={Paper} sx={{width: '100%'}}>
             <Table aria-label="simple table">
                 <TableHead>
                     <TableRow>
@@ -131,13 +63,14 @@ export default function PostsTable() {
                             count={pageInfo?.offsetPagination?.total ?? 0}
                             rowsPerPage={rowsPerPage}
                             page={page}
-                            SelectProps={{
-                                inputProps: {'aria-label': 'rows per page'},
-                                native: true,
+                            slotProps={{
+                                select: {
+                                    inputProps: {'aria-label': 'rows per page'},
+                                    native: true,
+                                }
                             }}
-                            onChangePage={handleChangePage}
-                            onChangeRowsPerPage={handleChangeRowsPerPage}
-                            ActionsComponent={TablePaginationActions}
+                            onRowsPerPageChange={handleRowsPerPageChange}
+                            onPageChange={handleChangePage}
                         />
                     </TableRow>
                 </TableFooter>

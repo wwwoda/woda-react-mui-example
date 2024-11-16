@@ -1,4 +1,4 @@
-import JwtDecode from "jwt-decode";
+import {jwtDecode} from "jwt-decode";
 import {refreshAuthToken} from "../GraphQl/Mutation/RefreshAuthToken";
 
 const localStorageKey = 'auth_token';
@@ -34,14 +34,13 @@ export function loadAuthToken() {
 }
 
 export function saveAuthToken(authTokenString: string, refreshTokenString: string) {
-    const decoded = JwtDecode(authTokenString) as DecodedAuthToken;
+    const decoded = jwtDecode(authTokenString) as DecodedAuthToken;
     const authToken: AuthToken = {
         authToken: authTokenString,
         refreshToken: refreshTokenString,
         expireTimestamp: decoded.exp,
         userId: decoded.data.user.id,
     };
-    console.log('saving authToken ', authToken);
     //inMemoryAuthToken = authToken;
     localStorage.setItem(localStorageKey, JSON.stringify(authToken));
     return authToken;
@@ -50,7 +49,6 @@ export function saveAuthToken(authTokenString: string, refreshTokenString: strin
 export function isExpired() {
     const authToken = loadAuthToken();
     const isExpired = authToken === undefined ? true : new Date(authToken.expireTimestamp * 1000) < new Date();
-    console.log('isExpired ', isExpired)
     return isExpired;
 }
 
